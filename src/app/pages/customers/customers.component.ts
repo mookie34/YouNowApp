@@ -22,6 +22,8 @@ export class CustomersComponent implements OnInit {
     phone:''
   };
 
+  successMessage = '';
+
   constructor(private customerService: CustomerService) { }
 
   ngOnInit(): void {
@@ -66,6 +68,8 @@ export class CustomersComponent implements OnInit {
       next: (newCustomer) => {
         this.loadCustomers(); // recargar lista
         this.closeForm(); // cerrar modal
+        this.successMessage = 'Cliente creado exitosamente.';
+        setTimeout(() => this.successMessage = '', 3000); // limpiar mensaje
       },
       error: (err) => {
         console.error('Error al crear cliente:', err);

@@ -11,7 +11,7 @@ import { NgFor } from '@angular/common';
 export class SidebarComponent {
   menu = [
     { label: 'Dashboard', icon: '🏠', route: '/dashboard', exact: true },
-    {label: 'Clientes', icon: '👥', route: '/usuarios' },
+    {label: 'Clientes', icon: '👥', route: '/customers' },
     { label: 'Productos', icon: '🛒', route: '/productos' },
     { label: 'Pedidos', icon: '📦', route: '/pedidos' },
     { label: 'Validar pagos', icon: '✅', route: '/validar-pagos' },

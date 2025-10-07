@@ -22,6 +22,7 @@
           <th class="py-2 px-4 text-left">Teléfono</th>
           <th class="py-2 px-4 text-left">Email</th>
           <th class="py-2 px-4 text-left">Fecha creación</th>
+          <th class="py-2 px-4 text-left">Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -33,6 +34,18 @@
           <td class="py-2 px-4">
             {{ customer.created_at ? (customer.created_at | date:'short') : '—' }}
           </td>
+          <td class="py-2 px-4">
+            <button
+              (click)="editCustomer(customer)"
+              class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+              Editar
+            </button>
+             <button
+              (click)="deleteCustomer(customer.id)"
+              class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 ml-2">
+              Eliminar
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -41,7 +54,9 @@
   <!-- Modal formulario para crear nuevo cliente -->
    <div *ngIf="showForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
     <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-      <h2 class="text-xl font-bold mb-4">Nuevo Cliente</h2>
+      <h2 class="text-xl font-bold mb-4">
+        {{editingCustomer ? 'Editar Cliente' : 'Nuevo Cliente' }}
+      </h2>
       <form (ngSubmit)="saveCustomer()">
         <div class="mb-2">
           <label class="block mb-1">Nombre</label>

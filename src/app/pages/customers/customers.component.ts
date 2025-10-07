@@ -23,6 +23,7 @@ export class CustomersComponent implements OnInit {
   };
 
   successMessage = '';
+  editingCustomer: Customer | null = null;
 
   constructor(private customerService: CustomerService) { }
 
@@ -49,13 +50,45 @@ export class CustomersComponent implements OnInit {
 
   //-- Abrir modal de formulario --
   openForm(): void {
+    this.editingCustomer = null;
     this.customerForm = { name: '', email: '', phone: '' };
     this.showForm = true;
-  };
+  }
+
+  editCustomer(customer:Customer): void {
+    this.editingCustomer = customer;
+    this.customerForm = {
+      name: customer.name,
+      email: customer.email || '',
+      phone: customer.phone
+    };
+    this.showForm = true;
+  }
+
+  deleteCustomer(id:number | undefined): void {
+    if(id === undefined) {
+      console.error('ID de cliente inválido para eliminar');
+      return;
+    }
+    if(confirm('¿Está seguro de que desea eliminar este cliente?')) {
+      this.customerService.deleteCustomer(id).subscribe({
+        next: () => {
+          this.loadCustomers(); // recargar lista
+          this.successMessage = 'Cliente eliminado exitosamente.';
+          setTimeout(() => this.successMessage = '', 3000); // limpiar mensaje
+        },
+        error: (err) => {
+          console.error('Error al eliminar cliente:', err);
+          alert('No se pudo eliminar el cliente.');
+        }
+      });
+    }
+  }
+
   //-- Cerrar modal de formulario --
   closeForm(): void {
     this.showForm = false;
-  };
+  }
 
   //-- Guardar nuevo cliente --
   saveCustomer(): void {
@@ -64,7 +97,27 @@ export class CustomersComponent implements OnInit {
       return;
     }
 
-    this.customerService.createCustomer(this.customerForm).subscribe({
+    //--- Si estamos editando un cliente existente ---
+    if(this.editingCustomer) {
+      if (!this.editingCustomer || this.editingCustomer.id === undefined) {
+      console.error('No se encontró el ID del cliente a editar');
+      return;
+    }
+      this.customerService.updateCustomer(this.editingCustomer.id, this.customerForm).subscribe({
+        next: () => {
+          this.loadCustomers(); // recargar lista
+          this.closeForm();
+          this.successMessage = 'Cliente actualizado exitosamente.';
+          setTimeout(() => this.successMessage = '', 3000); // limpiar mensaje
+        },
+        error: (err) => {
+          console.error('Error al actualizar cliente:', err);
+          alert('No se pudo actualizar el cliente.');
+        },
+      });
+    }else{
+    //--- Crear nuevo cliente ---
+          this.customerService.createCustomer(this.customerForm).subscribe({
       next: (newCustomer) => {
         this.loadCustomers(); // recargar lista
         this.closeForm(); // cerrar modal
@@ -76,7 +129,7 @@ export class CustomersComponent implements OnInit {
         alert('No se pudo crear el cliente.');
       }
     });
+    }
   };
-
 }
 

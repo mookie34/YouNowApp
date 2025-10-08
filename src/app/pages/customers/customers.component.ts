@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CustomerService, Customer } from '../../services/customer';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-customers',
@@ -16,6 +18,7 @@ export class CustomersComponent implements OnInit {
   searchTerm = '';
   searchType: 'id' | 'phone' = 'id';
   filteredCustomers: Customer[] = [];
+  private searchSubject = new Subject<string>();
 
   //-- Variables para el formulario de creación de clientes --
   showForm = false;
@@ -32,6 +35,18 @@ export class CustomersComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCustomers();
+    //Escuchar cambios en el término de búsqueda con debounce
+    this.searchSubject.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe(term => {
+      this.searchTerm = term;
+      this.searchCustomer();
+    });
+  }
+
+  onSearchChange(term: string){
+    this.searchSubject.next(term);
   }
 
   loadCustomers(): void {
@@ -52,6 +67,7 @@ export class CustomersComponent implements OnInit {
   }
 
   searchCustomer(): void {
+
     const term = this.searchTerm.trim();
     if (!term) {
       this.loadCustomers();
@@ -80,7 +96,7 @@ export class CustomersComponent implements OnInit {
       // Buscar por teléfono
       this.customerService.getCustomerByPhone(term).subscribe({
         next: (data) => {
-          this.customers = data ? [data] : [];
+          this.customers = Array.isArray(data) ? data : [data];
           this.loading = false;
         },
         error: (err) => {
@@ -127,6 +143,11 @@ export class CustomersComponent implements OnInit {
         }
       });
     }
+  }
+
+  clearInputSearch(): void {
+    this.searchTerm = '';
+    this.loadCustomers();
   }
 
   //-- Cerrar modal de formulario --

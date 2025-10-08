@@ -12,6 +12,29 @@
   <button class="bg-blue-500 text-white px-4 py-2 rounded mb-4 hover:bg-blue-600" (click)="openForm()">
     Nuevo Cliente
   </button>
+  <!-- Busqueda de cliente-->
+   <div class="flex gap-2 mb-4 items-center">
+    <select [(ngModel)]="searchType" class="border px-2 py-1 rounded">
+      <option value="id">Buscar por ID</option>
+      <option value="phone">Buscar por Teléfono</option>
+    </select>
+
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      placeholder="Ingrese término de búsqueda"
+      class="border px-2 py-1 rounded flex-grow"
+    />
+
+    <button (click)="searchCustomer()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+      Buscar
+    </button>
+    
+    <button (click)="loadCustomers()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+      Limpiar
+    </button>
+
+   </div>
   <!-- Tabla de clientes -->
   <div *ngIf="!loading && !error">
     <table class="min-w-full bg-white border border-blue-200 rounded-lg shadow">

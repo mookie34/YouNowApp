@@ -27,6 +27,10 @@ export class CustomerService {
   getCustomerById(id: number): Observable<Customer> {
     return this.http.get<Customer>(`${this.apiUrl}/${id}`);
   }
+  //Obtener un cliente por telefono
+  getCustomerByPhone(phone: string): Observable<Customer> {
+    return this.http.get<Customer>(`${this.apiUrl}/phone/${phone}`);
+  }
   // Crear un nuevo cliente
   createCustomer(customer: Customer): Observable<Customer> {
     return this.http.post<Customer>(this.apiUrl, customer);

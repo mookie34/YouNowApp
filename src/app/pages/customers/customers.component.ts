@@ -13,6 +13,9 @@ export class CustomersComponent implements OnInit {
   customers: Customer[] = [];
   loading = true;
   error = '';
+  searchTerm = '';
+  searchType: 'id' | 'phone' = 'id';
+  filteredCustomers: Customer[] = [];
 
   //-- Variables para el formulario de creación de clientes --
   showForm = false;
@@ -46,6 +49,47 @@ export class CustomersComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  searchCustomer(): void {
+    const term = this.searchTerm.trim();
+    if (!term) {
+      this.loadCustomers();
+      return;
+    }
+
+    this.loading = true;
+    this.error = '';
+
+    if(this.searchType === 'id') {
+      // Buscar por ID
+      const id = parseInt(term);
+      this.customerService.getCustomerById(id).subscribe({
+        next: (data) => {
+          this.customers = data ? [data] : [];
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error al buscar cliente:', err);
+          this.error = 'No se pudo buscar el cliente.';
+          this.loading = false;
+        },
+      });
+    }
+    else{
+      // Buscar por teléfono
+      this.customerService.getCustomerByPhone(term).subscribe({
+        next: (data) => {
+          this.customers = data ? [data] : [];
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error al buscar cliente por teléfono:', err);
+          this.error = 'No se pudo buscar el cliente por teléfono.';
+          this.loading = false;
+        },
+      });
+    }
   }
 
   //-- Abrir modal de formulario --

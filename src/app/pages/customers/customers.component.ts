@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CustomerService, Customer } from '../../services/customer';
+import { CustomerService, Customer } from '../../services/customer.service';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
@@ -135,7 +135,7 @@ export class CustomersComponent implements OnInit {
         next: () => {
           this.loadCustomers(); // recargar lista
           this.successMessage = 'Cliente eliminado exitosamente.';
-          setTimeout(() => this.successMessage = '', 3000); // limpiar mensaje
+          setTimeout(() => this.successMessage = '', 5000); // limpiar mensaje
         },
         error: (err) => {
           console.error('Error al eliminar cliente:', err);
@@ -173,7 +173,7 @@ export class CustomersComponent implements OnInit {
           this.loadCustomers(); // recargar lista
           this.closeForm();
           this.successMessage = 'Cliente actualizado exitosamente.';
-          setTimeout(() => this.successMessage = '', 3000); // limpiar mensaje
+          setTimeout(() => this.successMessage = '', 5000); // limpiar mensaje
         },
         error: (err) => {
           console.error('Error al actualizar cliente:', err);
@@ -187,7 +187,7 @@ export class CustomersComponent implements OnInit {
         this.loadCustomers(); // recargar lista
         this.closeForm(); // cerrar modal
         this.successMessage = 'Cliente creado exitosamente.';
-        setTimeout(() => this.successMessage = '', 3000); // limpiar mensaje
+        setTimeout(() => this.successMessage = '', 5000); // limpiar mensaje
       },
       error: (err) => {
         console.error('Error al crear cliente:', err);

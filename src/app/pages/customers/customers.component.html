@@ -1,20 +1,24 @@
-<div class="p-6">
-  <h1 class="text-2xl font-bold mb-4">Clientes registrados</h1>
-  <div *ngIf="successMessage" class="mb-4 p-2 bg-green-200 text-green-800 rounded">
-    {{ successMessage }}
+<div class="p-6 bg-gray-50 min-h-screen">
+  <!-- Titulo -->
+   <div class="flex items-center justify-between mb-6">
+    <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-2">👥 Clientes registrados</h1>
+     <!--Botón para crear nuevo cliente-->
+    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-20"
+      (click)="openForm()">
+      Nuevo Cliente
+    </button>
+   </div>
+   <!-- Mensajes -->
+  <div *ngIf="successMessage" class="mb-4 p-3 rounded-md bg-green-100 text-green-800 shadow-sm">
+    ✅ {{ successMessage }}
   </div>
-  <!-- Estado: cargando -->
-  <div *ngIf="loading" class="text-gray-500">Cargando clientes...</div>
+  <div *ngIf="loading" class="text-gray-500 italic">Cargando clientes...</div>
+  <div *ngIf="error" class="text-red-600 font-medium">{{ error }}</div>
 
-  <!-- Estado: error -->
-  <div *ngIf="error" class="text-red-600">{{ error }}</div>
-  <!--Botón para crear nuevo cliente-->
-  <button class="bg-blue-500 text-white px-4 py-2 rounded mb-4 hover:bg-blue-600" (click)="openForm()">
-    Nuevo Cliente
-  </button>
   <!-- Busqueda de cliente-->
-   <div class="flex gap-2 mb-4 items-center">
-    <select [(ngModel)]="searchType" class="border px-2 py-1 rounded">
+   <div class="bg-white p-4 rounded-lg shadow-sm mb-6 flex flex-wrap gap-3 items-center">
+    <select [(ngModel)]="searchType"
+    class="border border-gray-300 px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none">
       <option value="id">Buscar por ID</option>
       <option value="phone">Buscar por Teléfono</option>
     </select>
@@ -24,30 +28,28 @@
       [(ngModel)]="searchTerm"
       (input)="onSearchChange($event.target.value)"
       placeholder="Ingrese término de búsqueda"
-      class="border px-2 py-1 rounded flex-grow"
+      class="border border-gray-300 px-3 py-2 rounded-lg flex-grow focus:ring-2 focus:ring-blue-400 outline-none"
     />
-
-
-    <button (click)="clearInputSearch()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+    <button (click)="clearInputSearch()"
+       class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-all duration-200">
       Limpiar
     </button>
-
    </div>
   <!-- Tabla de clientes -->
-  <div *ngIf="!loading && !error">
-    <table class="min-w-full bg-white border border-blue-200 rounded-lg shadow">
-      <thead class="bg-blue-100 text-gray-700">
+  <div *ngIf="!loading && !error" class="overflow-x-auto bg-white rounded-xl shadow-lg">
+    <table class="min-w-full border-collapse">
+      <thead class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
         <tr>
-          <th class="py-2 px-4 text-center">ID</th>
-          <th class="py-2 px-4 text-center">Nombre</th>
-          <th class="py-2 px-4 text-center">Teléfono</th>
-          <th class="py-2 px-4 text-center">Email</th>
-          <th class="py-2 px-4 text-center">Fecha creación</th>
-          <th class="py-2 px-4 text-center">Acciones</th>
+           <th class="py-3 px-4 text-center font-bold">ID</th>
+          <th class="py-3 px-4 text-center font-bold">Nombre</th>
+          <th class="py-3 px-4 text-center font-bold">Teléfono</th>
+          <th class="py-3 px-4 text-center font-bold">Email</th>
+          <th class="py-3 px-4 text-center font-bold">Fecha creación</th>
+          <th class="py-3 px-4 text-center font-bold">Acciones</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let customer of customers" class="border-t hover:bg-blue-50">
+        <tr *ngFor="let customer of customers" class="border-b hover:bg-blue-50 transition-colors duration-150">
           <td class="py-2 px-4 text-center">{{ customer.id }}</td>
           <td class="py-2 px-4 text-center">{{ customer.name }}</td>
           <td class="py-2 px-4 text-center">{{ customer.phone }}</td>
@@ -55,15 +57,17 @@
           <td class="py-2 px-4 text-center">
             {{ customer.created_at ? (customer.created_at | date:'short') : '—' }}
           </td>
-          <td class="py-2 px-4 text-center">
+          <td class="py-3 px-4 text-center flex justify-center gap-2">
             <button
               (click)="editCustomer(customer)"
-              class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+              class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md transition-all"
+            >
               Editar
             </button>
              <button
               (click)="deleteCustomer(customer.id)"
-              class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 ml-3">
+              class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md transition-all"
+            >
               Eliminar
             </button>
           </td>
@@ -73,36 +77,73 @@
   </div>
 
   <!-- Modal formulario para crear nuevo cliente -->
-   <div *ngIf="showForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-      <h2 class="text-xl font-bold mb-4">
-        {{editingCustomer ? 'Editar Cliente' : 'Nuevo Cliente' }}
+ <div
+  *ngIf="showForm"
+  class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+>
+  <div
+    class="bg-white w-96 rounded-2xl shadow-2xl overflow-hidden animate-fadeIn"
+  >
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-4">
+      <h2 class="text-xl font-bold text-white text-center">
+        {{ editingCustomer ? 'Editar Cliente' : 'Nuevo Cliente' }}
       </h2>
-      <form (ngSubmit)="saveCustomer()">
-        <div class="mb-2">
-          <label class="block mb-1">Nombre</label>
-          <input type="text" [(ngModel)]="customerForm.name" name="name" required class="w-full border px-2 py-1 rounded">
-        </div>
-        <div class="mb-2">
-          <label class="block mb-1">Teléfono</label>
-          <input type="text" [(ngModel)]="customerForm.phone" name="phone" required class="w-full border px-2 py-1 rounded">
-        </div>
-        <div class="mb-2">
-          <label class="block mb-1">Email</label>
-          <input type="email" [(ngModel)]="customerForm.email" name="email" required class="w-full border px-2 py-1 rounded">
-        </div>
-
-        <div class="flex justify-end">
-          <button type="button" (click)="closeForm()" class="mr-2 px-4 py-2 rounded border">Cancelar</button>
-          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Guardar</button>
-        </div>
-      </form>
-
-
     </div>
 
+    <!-- Body -->
+    <div class="p-6">
+      <form (ngSubmit)="saveCustomer()" class="space-y-4">
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Nombre</label>
+          <input
+            type="text"
+            [(ngModel)]="customerForm.name"
+            name="name"
+            required
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-150"
+          />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Teléfono</label>
+          <input
+            type="text"
+            [(ngModel)]="customerForm.phone"
+            name="phone"
+            required
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-150"
+          />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Email</label>
+          <input
+            type="email"
+            [(ngModel)]="customerForm.email"
+            name="email"
+            required
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-150"
+          />
+        </div>
 
-
-   </div>
+        <!-- Buttons -->
+        <div class="flex justify-end gap-3 pt-2">
+          <button
+            type="button"
+            (click)="closeForm()"
+            class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition-all duration-150"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-md hover:from-blue-700 hover:to-indigo-700 transition-all duration-150"
+          >
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 </div>
 

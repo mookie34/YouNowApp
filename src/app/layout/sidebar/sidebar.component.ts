@@ -6,8 +6,11 @@ import { NgFor } from '@angular/common';
   selector: 'app-sidebar',
   standalone: true,
   imports: [RouterLink, RouterLinkActive, NgFor],
-  templateUrl: './sidebar.component.html'
+  templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.css']
 })
+
+
 export class SidebarComponent {
   menu = [
     { label: 'Dashboard', icon: '🏠', route: '/dashboard', exact: true },

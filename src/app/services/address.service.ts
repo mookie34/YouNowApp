@@ -9,8 +9,8 @@ export interface Address{
   label : string;
   address_text : string;
   reference? : string;
-  latitude? : string;
-  longitude? : string;
+  latitude? : number;
+  longitude? : number;
   created_at?: string;
   is_primary: boolean;
 }

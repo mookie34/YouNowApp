@@ -1,7 +1,6 @@
 import { Component, OnInit, Input} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subject } from 'rxjs';
 import { AddressService, Address } from 'src/app/services/address.service';
 
 @Component({
@@ -13,23 +12,35 @@ import { AddressService, Address } from 'src/app/services/address.service';
 })
 
 export class AddressComponent implements OnInit{
-  @Input() customerId!: number; //Recibe el ID del cliente desde el padre
+  @Input() customerId!: number; 
+
   addresses: Address[] = [];
   loading = true;
   error ='';
+  successMessage = '';
+  editingAddress: Address | null = null;
+
   filteredAddresses: Address[] = [];
 
   showForm = false;
-  addressForm = {
-    label:'',
-    address_text:'',
-    reference:'',
-    latitude:0,
-    longitude:0
-  };
+  addressForm: {
+    label: string;
+    address_text: string;
+    reference: string | null;
+    latitude: number;
+    longitude: number;
+    is_primary: boolean;
+} = {
+    label: '',
+    address_text: '',
+    reference: null,
+    latitude: 0,
+    longitude: 0,
+    is_primary: false
+};
 
-  successMessage = '';
-  editingAddress: Address | null = null;
+
+ 
 
   constructor(private addressService: AddressService){}
 
@@ -45,11 +56,6 @@ export class AddressComponent implements OnInit{
   loadAddresses(id:number):void{
     this.loading=true;
     this.error='';
-    if(id === undefined) {
-      console.error('ID de cliente inválido');
-      return;
-    }
-
     this.addressService.getAddressesByCustomerId(id).subscribe({
       next:(data) =>{
         this.addresses = Array.isArray(data) ? data : [data];
@@ -65,7 +71,7 @@ export class AddressComponent implements OnInit{
 
    openForm():void{
       this.editingAddress = null;
-      this.addressForm = {label:'',address_text:'',reference:'',latitude:0,longitude:0}
+      this.addressForm = {label:'',address_text:'',reference:null,latitude:0,longitude:0,is_primary:false}
       this.showForm = true;
   }
 
@@ -74,14 +80,15 @@ export class AddressComponent implements OnInit{
       this.addressForm = {
         label:address.label,
         address_text:address.address_text,
-        reference:address.reference || '',
+        reference:address.reference || null,
         latitude:address.latitude || 0,
-        longitude:address.longitude||0
+        longitude:address.longitude||0,
+        is_primary:address.is_primary || false
       };
       this.showForm=true;
   }
 
-  deleteAddress(id:number | undefined, idCustomer:number | undefined):void{
+  deleteAddress(id:number | undefined, idCustomer:number):void{
     if(id == undefined){
       console.error('ID de la dirección inválida para eliminar');
       return;
@@ -97,10 +104,55 @@ export class AddressComponent implements OnInit{
         },
         error: (err) => {
           console.error('Error al eliminar dirección:', err);
-          alert('No se pudo eliminar la dirección.');
+          alert('No se pudo eliminar la dirección, si es principal marque otra dirección como principal antes de eliminar.');
         }
       });
     }
+  }
+
+  createAddress():void{
+    if(!this.customerId) return;
+
+    const newAddress: Address ={
+      customer_id: this.customerId,
+      label: this.addressForm.label,
+      address_text: this.addressForm.address_text,
+      reference: this.addressForm.reference,
+      latitude: this.addressForm.latitude,
+      longitude: this.addressForm.longitude,
+      is_primary: this.addressForm.is_primary
+    };
+
+    this.addressService.createAddress(newAddress).subscribe({
+      next:()=>{
+        this.loadAddresses(this.customerId);
+        this.showForm=false;
+        this.successMessage = 'Dirección creada correctamente.';
+        setTimeout(()=>(this.successMessage=''),4000);
+      },
+      error: (err) => console.error('Error al crear dirección:', err)
+    });
+  }
+
+  updateAddress():void{
+    if(!this.editingAddress || !this.editingAddress.id) return;
+
+    const updatedAddress:Address ={
+      ...this.editingAddress,
+      ...this.addressForm,
+      latitude:this.addressForm.latitude,
+      longitude:this.addressForm.longitude
+    };
+
+    this.addressService.updateAddress(this.editingAddress.id, updatedAddress).subscribe({
+      next: () => {
+        this.loadAddresses(this.customerId);
+        this.showForm = false;
+        this.successMessage = 'Dirección actualizada correctamente.';
+        setTimeout(() => (this.successMessage = ''), 4000);
+      },
+      error: (err) => console.error('Error al actualizar dirección:', err)
+    });
   }
 
     closeForm(): void {

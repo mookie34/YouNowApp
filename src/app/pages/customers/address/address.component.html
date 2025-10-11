@@ -1,1 +1,156 @@
-<p>address works!</p>
+<div class="p-4">
+  <!-- Título y botón -->
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+      📍 Direcciones del cliente
+    </h2>
+    <button
+      (click)="openForm()"
+      class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-200"
+    >
+      ➕ Nueva dirección
+    </button>
+  </div>
+
+  <!-- Mensajes -->
+  <div *ngIf="successMessage" class="mb-3 p-2 bg-green-100 text-green-700 rounded-md shadow-sm">
+    ✅ {{ successMessage }}
+  </div>
+  <div *ngIf="error" class="mb-3 p-2 bg-red-100 text-red-700 rounded-md shadow-sm">
+    ⚠️ {{ error }}
+  </div>
+
+  <!-- Estado cargando -->
+  <div *ngIf="loading" class="text-gray-500 italic">Cargando direcciones...</div>
+
+  <!-- Tabla de direcciones -->
+  <div *ngIf="!loading && addresses.length > 0" class="overflow-x-auto bg-white rounded-xl shadow-lg">
+    <table class="min-w-full border-collapse">
+      <thead class="bg-gradient-to-r from-indigo-600 to-blue-600 text-white">
+        <tr>
+          <th class="py-3 px-4 text-center font-semibold">Etiqueta</th>
+          <th class="py-3 px-4 text-center font-semibold">Dirección</th>
+          <th class="py-3 px-4 text-center font-semibold">Referencia</th>
+          <th class="py-3 px-4 text-center font-semibold">Principal</th>
+          <th class="py-3 px-4 text-center font-semibold">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let address of addresses"
+          class="border-b hover:bg-blue-50 transition-colors duration-150"
+        >
+          <td class="py-2 px-4 text-center font-medium text-gray-700">
+            {{ address.label }}
+          </td>
+          <td class="py-2 px-4 text-center text-gray-600">{{ address.address_text }}</td>
+          <td class="py-2 px-4 text-center text-gray-600">{{ address.reference || '—' }}</td>
+          <td class="py-2 px-4 text-center">
+            <span
+              class="px-2 py-1 rounded-full text-sm font-medium"
+              [class.bg-green-100]="address.is_primary"
+              [class.text-green-800]="address.is_primary"
+              [class.bg-gray-100]="!address.is_primary"
+              [class.text-gray-600]="!address.is_primary"
+            >
+              {{ address.is_primary ? 'Sí' : 'No' }}
+            </span>
+          </td>
+          <td class="py-2 px-4 text-center flex justify-center gap-2">
+            <button
+              (click)="editAddress(address)"
+              class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md transition-all"
+            >
+              ✏️ Editar
+            </button>
+            <button
+              (click)="deleteAddress(address.id, address.customer_id)"
+              class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md transition-all"
+            >
+              🗑️ Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Estado vacío -->
+  <div *ngIf="!loading && addresses.length === 0" class="text-gray-500 italic text-center py-4">
+    No hay direcciones registradas para este cliente.
+  </div>
+
+  <!-- Modal Formulario Nueva/Editar Dirección -->
+  <div
+    *ngIf="showForm"
+    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+  >
+    <div class="bg-white w-[450px] rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
+      <!-- Header -->
+      <div class="bg-gradient-to-r from-indigo-600 to-blue-600 p-4">
+        <h2 class="text-xl font-bold text-white text-center">
+          {{ editingAddress ? 'Editar Dirección' : 'Nueva Dirección' }}
+        </h2>
+      </div>
+
+      <!-- Formulario -->
+      <div class="p-6">
+        <form (ngSubmit)="editingAddress ? updateAddress() : createAddress()" class="space-y-4">
+          <div>
+            <label class="block text-gray-700 font-medium mb-1">Etiqueta</label>
+            <input
+              type="text"
+              [(ngModel)]="addressForm.label"
+              name="label"
+              required
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none"
+            />
+          </div>
+
+          <div>
+            <label class="block text-gray-700 font-medium mb-1">Dirección</label>
+            <input
+              type="text"
+              [(ngModel)]="addressForm.address_text"
+              name="address_text"
+              required
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none"
+            />
+          </div>
+
+          <div>
+            <label class="block text-gray-700 font-medium mb-1">Referencia</label>
+            <input
+              type="text"
+              [(ngModel)]="addressForm.reference"
+              name="reference"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none"
+            />
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input type="checkbox" [(ngModel)]="addressForm.is_primary" name="is_primary" />
+            <label class="text-gray-700 font-medium">Marcar como principal</label>
+          </div>
+
+          <!-- Botones -->
+          <div class="flex justify-end gap-3 pt-3">
+            <button
+              type="button"
+              (click)="closeForm()"
+              class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition-all duration-150"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold shadow-md hover:from-indigo-700 hover:to-blue-700 transition-all duration-150"
+            >
+              Guardar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

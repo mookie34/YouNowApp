@@ -8,7 +8,7 @@ export interface Address{
   customer_id : number;
   label : string;
   address_text : string;
-  reference? : string;
+  reference? : string | null;
   latitude? : number;
   longitude? : number;
   created_at?: string;

@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { CustomerService, Customer } from '../../services/customer.service';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { AddressComponent } from '../customers/address/address.component'
 
 @Component({
   selector: 'app-customers',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AddressComponent],
   templateUrl:'./customers.component.html',
 })
 export class CustomersComponent implements OnInit {
@@ -22,6 +23,7 @@ export class CustomersComponent implements OnInit {
 
   //-- Variables para el formulario de creación de clientes --
   showForm = false;
+  showAddressModal = false;
   customerForm = {
     name:'',
     email:'',
@@ -30,6 +32,7 @@ export class CustomersComponent implements OnInit {
 
   successMessage = '';
   editingCustomer: Customer | null = null;
+  selectedCustomer:any=null;
 
   constructor(private customerService: CustomerService) { }
 
@@ -196,5 +199,15 @@ export class CustomersComponent implements OnInit {
     });
     }
   };
+
+  openAddressModal(customer:any):void{
+    this.selectedCustomer = customer;
+    this.showAddressModal=true;
+  }
+
+  closeAddressModal():void{
+    this.showAddressModal = false;
+    this.selectedCustomer = null;
+  }
 }
 

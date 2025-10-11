@@ -59,16 +59,21 @@
           </td>
           <td class="py-3 px-4 text-center flex justify-center gap-2">
             <button
+            (click)="openAddressModal(customer)"
+            class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md transition-all">
+            📍 Direcciones
+          </button>
+            <button
               (click)="editCustomer(customer)"
               class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md transition-all"
             >
-              Editar
+              ✏️ Editar
             </button>
              <button
               (click)="deleteCustomer(customer.id)"
               class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md transition-all"
             >
-              Eliminar
+              🗑️ Eliminar
             </button>
           </td>
         </tr>
@@ -81,9 +86,7 @@
   *ngIf="showForm"
   class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
 >
-  <div
-    class="bg-white w-96 rounded-2xl shadow-2xl overflow-hidden animate-fadeIn"
-  >
+  <div class="bg-white w-96 rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
     <!-- Header -->
     <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-4">
       <h2 class="text-xl font-bold text-white text-center">
@@ -145,5 +148,29 @@
     </div>
   </div>
 </div>
+</div>
+
+<!--Modal Direcciones-->
+<div
+  *ngIf="showAddressModal"
+  class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+  >
+  <div class="bg-white w-[700px] rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
+    <div class="bg-gradient-to-r from-indigo-600 to-blue-600 p-4 flex justify-between items-center">
+      <h2 class="text-xl font-bold text-white">
+        Direcciones de {{selectedCustomer?.name}}
+      </h2>
+      <button
+        (click)="closeAddressModal()"
+        class="text-white text-2xl font-bold hover:text-gray-200">
+         ✖
+      </button>
+    </div>
+
+    <!-- Cuerpo del modal-->
+     <div class="p-6">
+      <app-address [customerId]="selectedCustomer.id"></app-address>
+     </div>
+  </div>
 </div>
 

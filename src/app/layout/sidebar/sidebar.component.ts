@@ -15,7 +15,7 @@ export class SidebarComponent {
   menu = [
     { label: 'Dashboard', icon: '🏠', route: '/dashboard', exact: true },
     {label: 'Clientes', icon: '👥', route: '/customers' },
-    { label: 'Productos', icon: '🛒', route: '/productos' },
+    { label: 'Productos', icon: '🛒', route: '/products' },
     { label: 'Pedidos', icon: '📦', route: '/pedidos' },
     { label: 'Validar pagos', icon: '✅', route: '/validar-pagos' },
     { label: 'Domiciliarios', icon: '🚴‍♂️', route: '/domiciliarios' },

@@ -1,1 +1,72 @@
-<p>products works!</p>
+<div class="p-6 bg-gray-50 min-h-screen">
+ <div class="flex items-center justify-between mb-6">
+    <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-2">🛒 Productos registrados</h1>
+     <!--Botón para crear nuevo producto-->
+    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-20"
+    >
+      Nuevo Producto
+    </button>
+   </div>
+   <!-- Mensajes -->
+   <div *ngIf="successMessage" class="mb-4 p-3 rounded-md bg-green-100 text-green-800 shadow-sm">
+    ✅
+   </div>
+   <div *ngIf="loading" class="text-gray-500 italic">Cargando clientes...</div>
+   <div *ngIf="error" class="text-red-600 font-medium"></div>
+     <!-- Busqueda de cliente-->
+   <div class="bg-white p-4 rounded-lg shadow-sm mb-6 flex flex-wrap gap-3 items-center">
+    <select
+    class="border border-gray-300 px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none">
+      <option value="id">Buscar por ID</option>
+      <option value="phone">Buscar por nombre</option>
+    </select>
+
+    <input
+      type="text"
+      placeholder="Ingrese término de búsqueda"
+      class="border border-gray-300 px-3 py-2 rounded-lg flex-grow focus:ring-2 focus:ring-blue-400 outline-none"
+    />
+    <button
+       class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-all duration-200">
+      Limpiar
+    </button>
+   </div>
+   <!-- Tabla de productos -->
+    <div class="overflow-x-auto bg-white rounded-xl shadow-lg">
+      <table class="min-w-full border-collapse">
+        <thead class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+          <tr>
+           <th class="py-3 px-4 text-center font-bold">ID</th>
+          <th class="py-3 px-4 text-center font-bold">Nombre</th>
+          <th class="py-3 px-4 text-center font-bold">Descripción</th>
+          <th class="py-3 px-4 text-center font-bold">Precio</th>
+          <th class="py-3 px-4 text-center font-bold">Activo</th>
+          <th class="py-3 px-4 text-center font-bold">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+                  <tr class="border-b hover:bg-blue-50 transition-colors duration-150">
+          <td class="py-2 px-4 text-center"></td>
+          <td class="py-2 px-4 text-center"></td>
+          <td class="py-2 px-4 text-center"></td>
+          <td class="py-2 px-4 text-center"></td>
+          <td class="py-2 px-4 text-center"></td>
+          <td class="py-3 px-4 text-center flex justify-center gap-2">
+            <button
+              class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md transition-all"
+            >
+              ✏️ Editar
+            </button>
+             <button
+              class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md transition-all"
+            >
+              🗑️ Eliminar
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Modal formulario para crear nuevo producto -->
+
+</div>

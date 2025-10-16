@@ -1,59 +1,146 @@
 # YouNowApp
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.4.
+Aplicación web construida con Angular para la gestión de clientes, productos y dashboard administrativo.
 
-## Development server
+## 🚀 Stack Tecnológico
 
-To start a local development server, run:
+- **Angular** 20.3.0
+- **TypeScript** 5.9.2
+- **Tailwind CSS** 3.4.14
+- **RxJS** 7.8.0
+- **Jasmine & Karma** - Testing
 
+## 📋 Requisitos Previos
+
+- Node.js (versión LTS recomendada)
+- npm o yarn
+- Angular CLI 20.3.4
+
+## 🔧 Instalación
+
+1. Clonar el repositorio:
 ```bash
-ng serve
+git clone <repository-url>
+cd YouNowApp
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+2. Instalar dependencias:
 ```bash
-ng generate component component-name
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 🎯 Scripts Disponibles
 
+### Desarrollo
 ```bash
-ng generate --help
+npm start
+```
+Inicia el servidor de desarrollo con proxy configurado en `http://localhost:4200/`
+
+### Build
+```bash
+npm run build
+```
+Genera la versión de producción optimizada en el directorio `dist/`
+
+### Tests
+```bash
+npm test
+```
+Ejecuta las pruebas unitarias con Karma
+
+### Watch Mode
+```bash
+npm run watch
+```
+Compila el proyecto en modo desarrollo con observación de cambios
+
+### Tailwind Init
+```bash
+npm run tailwind:init
+```
+Inicializa la configuración de Tailwind CSS
+
+## 📁 Estructura del Proyecto
+
+```
+YouNowApp/
+├── src/
+│   ├── app/
+│   │   ├── layout/
+│   │   │   └── sidebar/          # Componente de barra lateral
+│   │   ├── pages/
+│   │   │   ├── dashboard/        # Página principal del dashboard
+│   │   │   ├── customers/        # Gestión de clientes
+│   │   │   └── products/         # Gestión de productos
+│   │   ├── services/
+│   │   │   ├── address.service.ts    # Servicio de direcciones
+│   │   │   ├── customer.service.ts   # Servicio de clientes
+│   │   │   └── product.service.ts    # Servicio de productos
+│   │   ├── shared/
+│   │   │   └── components/       # Componentes compartidos
+│   │   ├── app.config.ts         # Configuración de la aplicación
+│   │   ├── app.routes.ts         # Definición de rutas
+│   │   └── app.ts                # Componente raíz
+│   ├── environments/
+│   │   ├── environment.ts        # Variables de entorno (dev)
+│   │   └── environment.prod.ts   # Variables de entorno (prod)
+│   ├── index.html
+│   ├── main.ts
+│   └── styles.css                # Estilos globales + Tailwind
+├── public/                       # Recursos estáticos
+├── angular.json                  # Configuración de Angular
+├── proxy.conf.json              # Configuración del proxy
+├── tailwind.config.js           # Configuración de Tailwind
+└── tsconfig.json                # Configuración de TypeScript
 ```
 
-## Building
+## 🔌 Configuración del Proxy
 
-To build the project run:
+El proyecto está configurado para hacer proxy de las peticiones `/api` hacia `http://localhost:3000`. Esto permite el desarrollo con un backend local sin problemas de CORS.
 
-```bash
-ng build
+Configuración en `proxy.conf.json`:
+```json
+{
+  "/api": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "changeOrigin": true
+  }
+}
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 🗺️ Rutas de la Aplicación
 
-## Running unit tests
+- `/` → Redirige a `/dashboard`
+- `/dashboard` → Panel principal
+- `/customers` → Gestión de clientes
+- `/products` → Gestión de productos
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## 🎨 Estilos
 
-```bash
-ng test
-```
+El proyecto utiliza **Tailwind CSS** para el diseño y estilos. La configuración está en `tailwind.config.js` y los estilos globales en `src/styles.css`.
 
-## Running end-to-end tests
+## 📝 Formato de Código
 
-For end-to-end (e2e) testing, run:
+Se utiliza Prettier con la siguiente configuración:
+- Print width: 100 caracteres
+- Single quotes habilitadas
+- Parser especial para archivos HTML de Angular
 
-```bash
-ng e2e
-```
+## 🏗️ Build de Producción
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+El build de producción incluye:
+- Optimización de archivos
+- Hashing de archivos para cache
+- Source maps deshabilitados
+- Budgets de tamaño:
+  - Initial: max 1MB
+  - Component styles: max 8kB
 
-## Additional Resources
+## 📚 Recursos Adicionales
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [Documentación de Angular](https://angular.dev)
+- [Angular CLI](https://angular.dev/tools/cli)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [RxJS](https://rxjs.dev)

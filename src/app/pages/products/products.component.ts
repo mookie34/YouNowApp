@@ -12,5 +12,48 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
   templateUrl: './products.component.html',
 })
 export class ProductsComponent {
+  products: Product[]=[];
+  loading = true;
+  error = '';
+  searchTerm = '';
+  searchType: 'id' | 'filter' = 'id';
+  filteredProducts: Product[] = [];
+  private searchSubject = new Subject<string>();
+
+  //-- Variables para el formulario de creación de producto --
+  showForm = false;
+  productForm = {
+    name: '',
+    description: '',
+    price: 0,
+    isActive: false
+  };
+
+  successMessage = '';
+  editingProduct: Product | null = null;
+  selectedProduct:any=null;
+
+  constructor(private productService:ProductService){}
+
+  ngOnInit(): void{
+    this.loadProducts();
+  }
+
+  loadProducts():void{
+    this.loading = true;
+    this.error='';
+
+    this.productService.getProducts().subscribe({
+      next: (data) =>{
+        this.products = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar productos:', err);
+        this.error = 'No se pudieron cargar los productos.';
+        this.loading = false;
+      },
+    });
+  }
 
 }

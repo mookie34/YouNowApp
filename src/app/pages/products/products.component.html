@@ -11,7 +11,7 @@
    <div *ngIf="successMessage" class="mb-4 p-3 rounded-md bg-green-100 text-green-800 shadow-sm">
     ✅
    </div>
-   <div *ngIf="loading" class="text-gray-500 italic">Cargando clientes...</div>
+   <div *ngIf="loading" class="text-gray-500 italic">Cargando productos...</div>
    <div *ngIf="error" class="text-red-600 font-medium"></div>
      <!-- Busqueda de cliente-->
    <div class="bg-white p-4 rounded-lg shadow-sm mb-6 flex flex-wrap gap-3 items-center">
@@ -32,7 +32,7 @@
     </button>
    </div>
    <!-- Tabla de productos -->
-    <div class="overflow-x-auto bg-white rounded-xl shadow-lg">
+    <div *ngIf="!loading && !error" class="overflow-x-auto bg-white rounded-xl shadow-lg">
       <table class="min-w-full border-collapse">
         <thead class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
           <tr>
@@ -45,25 +45,25 @@
         </tr>
         </thead>
         <tbody>
-                  <tr class="border-b hover:bg-blue-50 transition-colors duration-150">
-          <td class="py-2 px-4 text-center"></td>
-          <td class="py-2 px-4 text-center"></td>
-          <td class="py-2 px-4 text-center"></td>
-          <td class="py-2 px-4 text-center"></td>
-          <td class="py-2 px-4 text-center"></td>
-          <td class="py-3 px-4 text-center flex justify-center gap-2">
-            <button
-              class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md transition-all"
-            >
-              ✏️ Editar
-            </button>
-             <button
-              class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md transition-all"
-            >
-              🗑️ Eliminar
-            </button>
-          </td>
-        </tr>
+          <tr *ngFor="let product of products" class="border-b hover:bg-blue-50 transition-colors duration-150">
+            <td class="py-2 px-4 text-center">{{product.id}}</td>
+            <td class="py-2 px-4 text-center">{{product.name}}</td>
+            <td class="py-2 px-4 text-center">{{product.description}}</td>
+            <td class="py-2 px-4 text-center">{{product.price}}</td>
+            <td class="py-2 px-4 text-center">{{product.is_active}}</td>
+            <td class="py-3 px-4 text-center flex justify-center gap-2">
+              <button
+                class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md transition-all"
+              >
+                ✏️ Editar
+              </button>
+              <button
+                class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md transition-all"
+              >
+                🗑️ Eliminar
+              </button>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

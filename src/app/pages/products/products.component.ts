@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { ProductService, Product } from 'src/app/services/product.service';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { PriceFormatDirective } from 'src/app/directives/price-format.directive';
+
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PriceFormatDirective],
   templateUrl: './products.component.html',
 })
 export class ProductsComponent {

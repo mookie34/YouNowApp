@@ -49,7 +49,7 @@
             <td class="py-2 px-4 text-center">{{product.id}}</td>
             <td class="py-2 px-4 text-center">{{product.name}}</td>
             <td class="py-2 px-4 text-center">{{product.description}}</td>
-            <td class="py-2 px-4 text-center">{{product.price}}</td>
+            <td class="py-2 px-4 text-center">${{ product.price | number:'1.2-2':'es-CO' }}</td>
             <td class="py-2 px-4 text-center">
               <input type="checkbox" [checked]="product.is_active" disabled />
             </td>
@@ -106,10 +106,12 @@
             <div>
               <label class="block text-gray-700 font-medium mb-1">Precio</label>
               <input
-                type="number"
+                type="text"
                 [(ngModel)]="productForm.price"
                 name="price"
+                appPriceFormat
                 required
+                placeholder="Ej: 12.000"
                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-150"
               />
             </div>

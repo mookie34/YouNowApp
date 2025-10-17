@@ -12,6 +12,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     }
   ]
 })
+
 export class PriceFormatDirective implements ControlValueAccessor {
   private onChange: (value: number | null) => void = () => {};
   private onTouched: () => void = () => {};

@@ -9,7 +9,7 @@
    </div>
    <!-- Mensajes -->
    <div *ngIf="successMessage" class="mb-4 p-3 rounded-md bg-green-100 text-green-800 shadow-sm">
-    ✅
+    ✅{{ successMessage }}
    </div>
    <div *ngIf="loading" class="text-gray-500 italic">Cargando productos...</div>
    <div *ngIf="error" class="text-red-600 font-medium"></div>
@@ -55,14 +55,16 @@
             </td>
             <td class="py-3 px-4 text-center flex justify-center gap-2">
               <button
+                (click)="editProduct(product)"
                 class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md transition-all"
               >
                 ✏️ Editar
               </button>
               <button
+                (click)="deleteProduct(product.id)"
                 class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md transition-all"
               >
-                🗑️ Eliminar
+                🗑️ Desactivar
               </button>
             </td>
           </tr>

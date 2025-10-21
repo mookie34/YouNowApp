@@ -76,31 +76,53 @@ export class ProductsComponent {
    this.showForm = true;
   }
 
-  deleteProduct(id:number | undefined):void{
-    if(id === undefined){
-      console.error('ID del producto inválido para desactivar');
-      return;
-    }
-
-    const product = this.products.find(p => p.id === id);
-    if(product && !product.is_active){
-      this.successMessage = 'El producto ya se encuentra desactivado.';
-      return;
-    }
-    if(confirm('¿Está seguro de que desea desactivar este producto?')) {
-      this.productService.deleteProduct(id).subscribe({
-        next:()=>{
-          this.loadProducts();
-          this.successMessage = 'Producto desactivar exitosamente.';
-          setTimeout(()=> this.successMessage='',5000);
-        },
-        error: (err) => {
-          console.error('Error al desactivar producto:', err);
-          alert('No se pudo desactivar el producto.');
-        }
-      });
-    }
+  deleteProduct(id: number | undefined): void {
+  if (id === undefined) {
+    console.error('ID del producto inválido para eliminar');
+    return;
   }
+
+  if (confirm('¿Está seguro de que desea eliminar permanentemente este producto?')) {
+    this.productService.deleteProduct(id).subscribe({
+      next: () => {
+        this.loadProducts();
+        this.successMessage = 'Producto eliminado exitosamente.';
+        setTimeout(() => (this.successMessage = ''), 5000);
+      },
+      error: (err) => {
+        console.error('Error al eliminar el producto:', err);
+        alert('No se pudo eliminar el producto.');
+      },
+    });
+  }
+}
+
+deactivateProduct(id: number | undefined): void {
+  if (id === undefined) {
+    console.error('ID del producto inválido para desactivar');
+    return;
+  }
+
+  const product = this.products.find((p) => p.id === id);
+  if (product && !product.is_active) {
+    alert('El producto ya se encuentra desactivado.');
+    return;
+  }
+
+  if (confirm('¿Está seguro de que desea desactivar este producto?')) {
+    this.productService.deactiveProduct(id).subscribe({
+      next: () => {
+        this.loadProducts();
+        this.successMessage = 'Producto desactivado exitosamente.';
+        setTimeout(() => (this.successMessage = ''), 5000);
+      },
+      error: (err) => {
+        console.error('Error al desactivar producto:', err);
+        alert('No se pudo desactivar el producto.');
+      },
+    });
+  }
+}
 
     //-- Cerrar modal de formulario --
   closeForm(): void {

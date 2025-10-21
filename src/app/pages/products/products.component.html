@@ -61,10 +61,16 @@
                 ✏️ Editar
               </button>
               <button
+                (click)="deactivateProduct(product.id)"
+                class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md transition-all mr-2"
+              >
+                🚫 Desactivar
+              </button>
+              <button
                 (click)="deleteProduct(product.id)"
                 class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md transition-all"
               >
-                🗑️ Desactivar
+                🗑️ Eliminar
               </button>
             </td>
           </tr>

@@ -1,105 +1,259 @@
 # YouNowApp
 
-Aplicación web construida con Angular para la gestión de clientes, productos y dashboard administrativo.
+Aplicacion web construida con Angular para la gestion de clientes, productos y direcciones con un dashboard administrativo. Orientada al mercado colombiano con soporte de locale `es-CO`.
 
-## 🚀 Stack Tecnológico
+---
 
-- **Angular** 20.3.0
-- **TypeScript** 5.9.2
-- **Tailwind CSS** 3.4.14
-- **RxJS** 7.8.0
-- **Jasmine & Karma** - Testing
+## Stack Tecnologico
 
-## 📋 Requisitos Previos
+| Capa | Tecnologia | Version |
+|------|-----------|---------|
+| **Frontend** | Angular (Standalone Components) | 20.3.0 |
+| **Lenguaje** | TypeScript | 5.9.2 |
+| **Estilos** | Tailwind CSS + PostCSS + Autoprefixer | 3.4.14 |
+| **Reactividad** | RxJS | 7.8.0 |
+| **Build** | Angular CLI + Vite | 20.3.4 |
+| **Testing** | Karma + Jasmine | 6.4.0 / 5.9.0 |
+| **Backend** | API REST (Node.js/Express en localhost:3000) | - |
+| **Internacionalizacion** | Locale es-CO (Spanish Colombia) | - |
 
-- Node.js (versión LTS recomendada)
-- npm o yarn
-- Angular CLI 20.3.4
+---
 
-## 🔧 Instalación
+## Arquitectura del Proyecto
 
-1. Clonar el repositorio:
-```bash
-git clone <repository-url>
-cd YouNowApp
+### Patron General
+
+La aplicacion sigue una arquitectura **Component-Service** basada en **Standalone Components** de Angular 14+:
+
+- **Componentes** (`pages/`, `layout/`, `shared/`) - Capa de presentacion. Cada componente gestiona su propio estado local.
+- **Servicios** (`services/`) - Capa de datos. Se comunican con la API REST via `HttpClient` y exponen Observables.
+- **Directivas** (`directives/`) - Logica reutilizable de DOM (ej: formateo de precios).
+- **Rutas** (`app.routes.ts`) - Navegacion con lazy loading implicito.
+
+```
+┌─────────────────────────────────────────────────┐
+│                   Angular App                    │
+│                                                  │
+│  ┌──────────┐  ┌──────────┐  ┌──────────────┐  │
+│  │ Sidebar  │  │  Navbar  │  │  Router View  │  │
+│  │ (layout) │  │ (shared) │  │   (pages)     │  │
+│  └──────────┘  └──────────┘  └──────┬───────┘  │
+│                                      │          │
+│                    ┌─────────────────┼────┐     │
+│                    │                 │    │     │
+│              ┌─────▼──┐  ┌──────▼──┐ ┌──▼───┐  │
+│              │Dashboard│  │Products │ │Custom.│  │
+│              └────────┘  └────┬────┘ └──┬───┘  │
+│                               │         │      │
+│                    ┌──────────▼─────────▼──┐   │
+│                    │      Services          │   │
+│                    │  (HttpClient + RxJS)   │   │
+│                    └──────────┬─────────────┘   │
+│                               │                 │
+└───────────────────────────────┼─────────────────┘
+                                │
+                    ┌───────────▼───────────┐
+                    │   API REST Backend    │
+                    │  localhost:3000/api   │
+                    └───────────────────────┘
 ```
 
-2. Instalar dependencias:
-```bash
-npm install
+### Standalone Components
+
+Todos los componentes usan `standalone: true` (sin NgModules). Las dependencias se importan directamente en cada componente:
+
+```typescript
+@Component({
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
+  // ...
+})
 ```
 
-## 🎯 Scripts Disponibles
+### Gestion de Estado
 
-### Desarrollo
-```bash
-npm start
-```
-Inicia el servidor de desarrollo con proxy configurado en `http://localhost:4200/`
+No se usa libreria de estado centralizado (NgRx, Akita, etc.). El patron es:
 
-### Build
-```bash
-npm run build
-```
-Genera la versión de producción optimizada en el directorio `dist/`
+1. **Estado local en componentes** - Propiedades del componente (`products: Product[] = []`, `loading = true`)
+2. **RxJS Subjects** - Para busqueda reactiva con `debounceTime(500)` y `distinctUntilChanged()`
+3. **Servicios como proveedores de datos** - Inyectados con `providedIn: 'root'` (singleton)
+4. **@Input/@Output** - Comunicacion padre-hijo (ej: `CustomersComponent` -> `AddressComponent`)
 
-### Tests
-```bash
-npm test
-```
-Ejecuta las pruebas unitarias con Karma
+### Formularios
 
-### Watch Mode
-```bash
-npm run watch
-```
-Compila el proyecto en modo desarrollo con observación de cambios
+Se utiliza **Template-driven Forms** con `FormsModule` y binding bidireccional `[(ngModel)]`. Validacion basica con atributos HTML (`required`).
 
-### Tailwind Init
-```bash
-npm run tailwind:init
-```
-Inicializa la configuración de Tailwind CSS
+---
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 YouNowApp/
 ├── src/
 │   ├── app/
+│   │   ├── directives/
+│   │   │   └── price-format.directive.ts    # Directiva de formateo de precios (ControlValueAccessor)
 │   │   ├── layout/
-│   │   │   └── sidebar/          # Componente de barra lateral
+│   │   │   └── sidebar/                     # Barra lateral de navegacion
 │   │   ├── pages/
-│   │   │   ├── dashboard/        # Página principal del dashboard
-│   │   │   ├── customers/        # Gestión de clientes
-│   │   │   └── products/         # Gestión de productos
+│   │   │   ├── customers/                   # Gestion de clientes
+│   │   │   │   └── address/                 # Sub-componente de direcciones
+│   │   │   ├── dashboard/                   # Panel principal
+│   │   │   └── products/                    # Catalogo de productos
 │   │   ├── services/
-│   │   │   ├── address.service.ts    # Servicio de direcciones
-│   │   │   ├── customer.service.ts   # Servicio de clientes
-│   │   │   └── product.service.ts    # Servicio de productos
+│   │   │   ├── product.service.ts           # CRUD de productos
+│   │   │   ├── customer.service.ts          # CRUD de clientes
+│   │   │   └── address.service.ts           # CRUD de direcciones
 │   │   ├── shared/
-│   │   │   └── components/       # Componentes compartidos
-│   │   ├── app.config.ts         # Configuración de la aplicación
-│   │   ├── app.routes.ts         # Definición de rutas
-│   │   └── app.ts                # Componente raíz
+│   │   │   └── components/
+│   │   │       └── navbar/                  # Navbar compartido
+│   │   ├── app.ts                           # Componente raiz
+│   │   ├── app.routes.ts                    # Definicion de rutas
+│   │   ├── app.config.ts                    # Configuracion y providers
+│   │   └── app.css                          # Estilos del componente raiz
 │   ├── environments/
-│   │   ├── environment.ts        # Variables de entorno (dev)
-│   │   └── environment.prod.ts   # Variables de entorno (prod)
-│   ├── index.html
-│   ├── main.ts
-│   └── styles.css                # Estilos globales + Tailwind
-├── public/                       # Recursos estáticos
-├── angular.json                  # Configuración de Angular
-├── proxy.conf.json              # Configuración del proxy
-├── tailwind.config.js           # Configuración de Tailwind
-└── tsconfig.json                # Configuración de TypeScript
+│   │   ├── environment.ts                   # Config desarrollo (localhost:3000)
+│   │   └── environment.prod.ts              # Config produccion
+│   ├── index.html                           # Punto de entrada HTML
+│   ├── main.ts                              # Bootstrap de la aplicacion
+│   └── styles.css                           # Estilos globales + Tailwind directives
+├── public/                                  # Recursos estaticos
+├── angular.json                             # Configuracion de Angular CLI
+├── proxy.conf.json                          # Proxy de desarrollo (/api -> :3000)
+├── tailwind.config.js                       # Configuracion de Tailwind CSS
+├── postcss.config.js                        # Pipeline de CSS
+├── tsconfig.json                            # Configuracion TypeScript
+├── tsconfig.app.json                        # TS config para la app
+└── package.json                             # Dependencias y scripts
 ```
 
-## 🔌 Configuración del Proxy
+---
 
-El proyecto está configurado para hacer proxy de las peticiones `/api` hacia `http://localhost:3000`. Esto permite el desarrollo con un backend local sin problemas de CORS.
+## Capa de Servicios (API)
 
-Configuración en `proxy.conf.json`:
+Todos los servicios siguen convenciones REST y usan `HttpClient` de Angular.
+
+### ProductService (`services/product.service.ts`)
+
+| Metodo | HTTP | Endpoint | Descripcion |
+|--------|------|----------|-------------|
+| `getProducts()` | GET | `/api/products` | Listar todos |
+| `getProductById(id)` | GET | `/api/products/:id` | Obtener por ID |
+| `getProductForFilter(filters)` | GET | `/api/products?params` | Busqueda con filtros dinamicos |
+| `createProduct(product)` | POST | `/api/products` | Crear producto |
+| `updateProduct(id, product)` | PUT | `/api/products/:id` | Actualizar completo |
+| `updateProductPartial(id, product)` | PATCH | `/api/products/:id` | Actualizar parcial |
+| `deleteProduct(id)` | DELETE | `/api/products/:id` | Eliminar producto |
+| `deactiveProduct(id)` | PATCH | `/api/products/:id` | Desactivar (soft delete) |
+
+### CustomerService (`services/customer.service.ts`)
+
+| Metodo | HTTP | Endpoint | Descripcion |
+|--------|------|----------|-------------|
+| `getCustomers()` | GET | `/api/customers` | Listar todos |
+| `getCustomerById(id)` | GET | `/api/customers/:id` | Obtener por ID |
+| `getCustomerByPhone(phone)` | GET | `/api/customers?phone=` | Buscar por telefono |
+| `createCustomer(customer)` | POST | `/api/customers` | Crear cliente |
+| `updateCustomer(id, customer)` | PUT | `/api/customers/:id` | Actualizar cliente |
+| `deleteCustomer(id)` | DELETE | `/api/customers/:id` | Eliminar cliente |
+
+### AddressService (`services/address.service.ts`)
+
+| Metodo | HTTP | Endpoint | Descripcion |
+|--------|------|----------|-------------|
+| `getAddressesByCustomerId(id)` | GET | `/api/addresses?customer_id=` | Direcciones por cliente |
+| `getPrimaryAddress(customerId)` | GET | `/api/addresses?customer_id=&is_primary=true` | Direccion principal |
+| `createAddress(address)` | POST | `/api/addresses` | Crear direccion |
+| `updateAddress(id, address)` | PATCH | `/api/addresses/:id` | Actualizar direccion |
+| `deleteAddress(id)` | DELETE | `/api/addresses/:id` | Eliminar direccion |
+
+### Modelos de Datos
+
+```typescript
+interface Product {
+  id?: number;
+  name: string;
+  description?: string;
+  price: number;
+  is_active: boolean;
+}
+
+interface Customer {
+  id?: number;
+  name: string;
+  phone: string;
+  email?: string;
+  created_at?: string;
+}
+
+interface Address {
+  id?: number;
+  customer_id: number;
+  label: string;
+  address_text: string;
+  reference?: string | null;
+  latitude?: number;
+  longitude?: number;
+  created_at?: string;
+  is_primary: boolean;
+}
+```
+
+---
+
+## Rutas de la Aplicacion
+
+| Ruta | Componente | Estado |
+|------|-----------|--------|
+| `/` | Redirige a `/dashboard` | Activa |
+| `/dashboard` | DashboardComponent | Activa |
+| `/customers` | CustomersComponent | Activa |
+| `/products` | ProductsComponent | Activa |
+| `/pedidos` | - | Planeada |
+| `/validar-pagos` | - | Planeada |
+| `/domiciliarios` | - | Planeada |
+| `/conciliacion` | - | Planeada |
+| `/configuracion` | - | Planeada |
+
+---
+
+## Patrones y Decisiones Tecnicas
+
+### Busqueda Reactiva con Debounce
+Los componentes de productos y clientes implementan busqueda reactiva con RxJS para evitar llamadas excesivas al API:
+```typescript
+private searchSubject = new Subject<string>();
+
+ngOnInit() {
+  this.searchSubject
+    .pipe(debounceTime(500), distinctUntilChanged())
+    .subscribe(() => this.searchProduct());
+}
+```
+
+### Locale Colombiano
+La aplicacion esta configurada globalmente con locale `es-CO` para formateo de fechas, moneda y numeros:
+```typescript
+import localeEs from '@angular/common/locales/es-CO';
+registerLocaleData(localeEs);
+// Provider: { provide: LOCALE_ID, useValue: 'es-CO' }
+```
+
+### Directiva de Formateo de Precios
+Directiva personalizada que implementa `ControlValueAccessor` para formatear precios en formato de peso colombiano (separador de miles: `.`, decimal: `,`).
+
+### Modales y Formularios
+Patron de modales basado en flags booleanos del componente (`showForm`, `showAddressModal`). Se determina si es creacion o edicion segun la existencia de `editingProduct`/`editingCustomer`.
+
+### Sin Autenticacion
+Actualmente no hay sistema de autenticacion implementado. Las peticiones al API se realizan sin tokens ni guards.
+
+---
+
+## Configuracion del Proxy
+
+El proxy de desarrollo redirige `/api` al backend en `localhost:3000`:
+
 ```json
 {
   "/api": {
@@ -110,37 +264,49 @@ Configuración en `proxy.conf.json`:
 }
 ```
 
-## 🗺️ Rutas de la Aplicación
+---
 
-- `/` → Redirige a `/dashboard`
-- `/dashboard` → Panel principal
-- `/customers` → Gestión de clientes
-- `/products` → Gestión de productos
+## Requisitos Previos
 
-## 🎨 Estilos
+- Node.js (version LTS recomendada)
+- npm
+- Angular CLI 20.3.4
 
-El proyecto utiliza **Tailwind CSS** para el diseño y estilos. La configuración está en `tailwind.config.js` y los estilos globales en `src/styles.css`.
+## Instalacion
 
-## 📝 Formato de Código
+```bash
+git clone <repository-url>
+cd YouNowApp
+npm install
+```
 
-Se utiliza Prettier con la siguiente configuración:
+## Scripts Disponibles
+
+| Script | Comando | Descripcion |
+|--------|---------|-------------|
+| Desarrollo | `npm start` | Servidor de desarrollo con proxy en `http://localhost:4200/` |
+| Build | `npm run build` | Build de produccion optimizado en `dist/` |
+| Tests | `npm test` | Pruebas unitarias con Karma |
+| Watch | `npm run watch` | Build en modo desarrollo con watch |
+
+## Build de Produccion
+
+- Optimizacion y minificacion de archivos
+- Hashing para cache busting
+- Source maps deshabilitados
+- Budgets: Initial max 1MB, Component styles max 8kB
+
+## Formato de Codigo
+
+Prettier configurado con:
 - Print width: 100 caracteres
 - Single quotes habilitadas
-- Parser especial para archivos HTML de Angular
+- Parser especial para HTML de Angular
 
-## 🏗️ Build de Producción
+---
 
-El build de producción incluye:
-- Optimización de archivos
-- Hashing de archivos para cache
-- Source maps deshabilitados
-- Budgets de tamaño:
-  - Initial: max 1MB
-  - Component styles: max 8kB
+## Recursos
 
-## 📚 Recursos Adicionales
-
-- [Documentación de Angular](https://angular.dev)
-- [Angular CLI](https://angular.dev/tools/cli)
+- [Angular](https://angular.dev)
 - [Tailwind CSS](https://tailwindcss.com/docs)
 - [RxJS](https://rxjs.dev)

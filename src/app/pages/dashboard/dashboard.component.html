@@ -1,100 +1,98 @@
-<div class="p-6 bg-gray-50 min-h-screen">
+<div class="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
   <!-- Título principal -->
   <div class="flex items-center justify-between mb-8">
-    <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-2">📊 Panel de Control</h1>
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">📊 Panel de Control</h1>
   </div>
 
   <!-- Tarjetas resumen -->
   <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-10">
-    <div class="flex items-center p-5 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-200">
+    <div class="flex items-center p-5 bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-lg transition-all duration-200">
       <div class="text-3xl mr-4">📦</div>
       <div>
-        <p class="text-sm text-gray-500">Pedidos del día</p>
-        <h2 class="text-2xl font-bold text-gray-800">15</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Pedidos del día</p>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">15</h2>
       </div>
     </div>
 
-    <div class="flex items-center p-5 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-200">
+    <div class="flex items-center p-5 bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-lg transition-all duration-200">
       <div class="text-3xl mr-4">💰</div>
       <div>
-        <p class="text-sm text-gray-500">Pagos pendientes</p>
-        <h2 class="text-2xl font-bold text-gray-800">4</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Pagos pendientes</p>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">4</h2>
       </div>
     </div>
 
-    <div class="flex items-center p-5 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-200">
+    <div class="flex items-center p-5 bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-lg transition-all duration-200">
       <div class="text-3xl mr-4">🛵</div>
       <div>
-        <p class="text-sm text-gray-500">Domiciliarios disponibles</p>
-        <h2 class="text-2xl font-bold text-gray-800">3</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Domiciliarios disponibles</p>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">3</h2>
       </div>
     </div>
 
-    <div class="flex items-center p-5 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-200">
+    <div class="flex items-center p-5 bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-lg transition-all duration-200">
       <div class="text-3xl mr-4">💳</div>
       <div>
-        <p class="text-sm text-gray-500">Total pagado hoy</p>
-        <h2 class="text-2xl font-bold text-gray-800">$320.000</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Total pagado hoy</p>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">$320.000</h2>
       </div>
     </div>
   </div>
 
   <!-- Sección tabla de pedidos -->
   <div class="flex items-center justify-between mb-6">
-    <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">📋 Pedidos recientes</h2>
+    <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">📋 Pedidos recientes</h2>
   </div>
 
-  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-  <table class="min-w-full border-collapse">
-    <thead>
-      <tr class="bg-gradient-to-r from-blue-600 to-indigo-600">
-        <th class="py-3 px-4 text-center font-bold text-white uppercase tracking-wide">ID</th>
-        <th class="py-3 px-4 text-center font-bold text-white uppercase tracking-wide">Cliente</th>
-        <th class="py-3 px-4 text-center font-bold text-white uppercase tracking-wide">Forma de pago</th>
-        <th class="py-3 px-4 text-center font-bold text-white uppercase tracking-wide">Estado</th>
-        <th class="py-3 px-4 text-center font-bold text-white uppercase tracking-wide">Total</th>
-      </tr>
-    </thead>
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+    <table class="min-w-full border-collapse">
+      <thead>
+        <tr class="bg-gradient-to-r from-blue-600 to-indigo-600">
+          <th class="py-3 px-4 text-center font-bold text-white uppercase tracking-wide">ID</th>
+          <th class="py-3 px-4 text-center font-bold text-white uppercase tracking-wide">Cliente</th>
+          <th class="py-3 px-4 text-center font-bold text-white uppercase tracking-wide">Forma de pago</th>
+          <th class="py-3 px-4 text-center font-bold text-white uppercase tracking-wide">Estado</th>
+          <th class="py-3 px-4 text-center font-bold text-white uppercase tracking-wide">Total</th>
+        </tr>
+      </thead>
 
-    <tbody>
-      <tr class="border-b hover:bg-blue-50 transition-colors duration-150">
-        <td class="py-3 px-4 text-center">#1025</td>
-        <td class="py-3 px-4 text-center">Juan Pérez</td>
-        <td class="py-3 px-4 text-center">Nequi</td>
-        <td class="py-3 px-4 text-center">
-          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-            Entregado
-          </span>
-        </td>
-        <td class="py-3 px-4 text-center font-semibold text-gray-800">$28.000</td>
-      </tr>
+      <tbody>
+        <tr class="border-b border-gray-100 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors duration-150">
+          <td class="py-3 px-4 text-center text-gray-700 dark:text-gray-300">#1025</td>
+          <td class="py-3 px-4 text-center text-gray-700 dark:text-gray-300">Juan Pérez</td>
+          <td class="py-3 px-4 text-center text-gray-700 dark:text-gray-300">Nequi</td>
+          <td class="py-3 px-4 text-center">
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400">
+              Entregado
+            </span>
+          </td>
+          <td class="py-3 px-4 text-center font-semibold text-gray-800 dark:text-gray-100">$28.000</td>
+        </tr>
 
-      <tr class="border-b hover:bg-blue-50 transition-colors duration-150">
-        <td class="py-3 px-4 text-center">#1024</td>
-        <td class="py-3 px-4 text-center">María López</td>
-        <td class="py-3 px-4 text-center">Efectivo</td>
-        <td class="py-3 px-4 text-center">
-          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
-            En camino
-          </span>
-        </td>
-        <td class="py-3 px-4 text-center font-semibold text-gray-800">$35.000</td>
-      </tr>
+        <tr class="border-b border-gray-100 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors duration-150">
+          <td class="py-3 px-4 text-center text-gray-700 dark:text-gray-300">#1024</td>
+          <td class="py-3 px-4 text-center text-gray-700 dark:text-gray-300">María López</td>
+          <td class="py-3 px-4 text-center text-gray-700 dark:text-gray-300">Efectivo</td>
+          <td class="py-3 px-4 text-center">
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400">
+              En camino
+            </span>
+          </td>
+          <td class="py-3 px-4 text-center font-semibold text-gray-800 dark:text-gray-100">$35.000</td>
+        </tr>
 
-      <tr class="hover:bg-blue-50 transition-colors duration-150">
-        <td class="py-3 px-4 text-center">#1023</td>
-        <td class="py-3 px-4 text-center">Carlos Gómez</td>
-        <td class="py-3 px-4 text-center">Transferencia</td>
-        <td class="py-3 px-4 text-center">
-          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
-            Pago confirmado
-          </span>
-        </td>
-        <td class="py-3 px-4 text-center font-semibold text-gray-800">$19.500</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-
+        <tr class="hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors duration-150">
+          <td class="py-3 px-4 text-center text-gray-700 dark:text-gray-300">#1023</td>
+          <td class="py-3 px-4 text-center text-gray-700 dark:text-gray-300">Carlos Gómez</td>
+          <td class="py-3 px-4 text-center text-gray-700 dark:text-gray-300">Transferencia</td>
+          <td class="py-3 px-4 text-center">
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400">
+              Pago confirmado
+            </span>
+          </td>
+          <td class="py-3 px-4 text-center font-semibold text-gray-800 dark:text-gray-100">$19.500</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

@@ -1,11 +1,9 @@
-<div class="p-6 bg-gray-50 min-h-screen">
-  <!-- 🔹 Encabezado -->
+<div class="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
+  <!-- Encabezado -->
   <div class="flex items-center justify-between mb-6">
-    <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-2">
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">
       🛒 Productos registrados
     </h1>
-
-    <!-- Botón nuevo producto -->
     <button
       class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-200"
       (click)="openForm()"
@@ -14,43 +12,38 @@
     </button>
   </div>
 
-  <!-- 🔹 Mensajes -->
-  <div *ngIf="successMessage" class="mb-4 p-3 rounded-md bg-green-100 text-green-800 shadow-sm">
+  <!-- Mensajes -->
+  <div *ngIf="successMessage" class="mb-4 p-3 rounded-md bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-400 shadow-sm">
     ✅ {{ successMessage }}
   </div>
+  <div *ngIf="loading" class="text-gray-500 dark:text-gray-400 italic">Cargando productos...</div>
+  <div *ngIf="error" class="text-red-600 dark:text-red-400 font-medium">{{ error }}</div>
 
-  <div *ngIf="loading" class="text-gray-500 italic">Cargando productos...</div>
-  <div *ngIf="error" class="text-red-600 font-medium">{{ error }}</div>
-
-  <!-- 🔹 Barra de búsqueda -->
-  <div class="bg-white p-4 rounded-lg shadow-sm mb-6 flex flex-col md:flex-row md:flex-wrap gap-3 items-center">
-    <!-- Tipo de búsqueda -->
+  <!-- Barra de búsqueda -->
+  <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm mb-6 flex flex-col md:flex-row md:flex-wrap gap-3 items-center">
     <select
       [(ngModel)]="searchType"
-      class="border border-gray-300 px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none w-full md:w-auto"
+      class="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none w-full md:w-auto"
     >
       <option value="id">Buscar por ID</option>
       <option value="name">Buscar por nombre</option>
     </select>
 
-    <!-- Campo de búsqueda (reactivo) -->
     <input
       type="text"
       [(ngModel)]="searchTerm"
       (input)="onSearchChange($event.target.value)"
       placeholder="Ingrese término de búsqueda"
-      class="border border-gray-300 px-3 py-2 rounded-lg flex-grow focus:ring-2 focus:ring-blue-400 outline-none w-full md:flex-1"
+      class="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 px-3 py-2 rounded-lg flex-grow focus:ring-2 focus:ring-blue-400 outline-none w-full md:flex-1"
     />
 
-    <!-- Botón para mostrar filtros avanzados -->
     <button
       (click)="showFilters = !showFilters"
-      class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg transition-all duration-200 w-full md:w-auto"
+      class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg transition-all duration-200 w-full md:w-auto"
     >
       {{ showFilters ? 'Ocultar filtros avanzados ⬆️' : 'Filtros avanzados ⬇️' }}
     </button>
 
-    <!-- Botón limpiar -->
     <button
       (click)="clearInputSearch()"
       class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-all duration-200 w-full md:w-auto"
@@ -59,39 +52,36 @@
     </button>
   </div>
 
-  <!-- 🧩 Filtros avanzados -->
-  <div *ngIf="showFilters" class="bg-gray-50 p-4 rounded-lg shadow-inner mb-6 flex flex-wrap gap-3">
-    <!-- Precio mínimo -->
+  <!-- Filtros avanzados -->
+  <div *ngIf="showFilters" class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-inner mb-6 flex flex-wrap gap-3">
     <div class="flex flex-col">
-      <label class="text-sm font-semibold text-gray-600 mb-1">Precio mínimo</label>
+      <label class="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-1">Precio mínimo</label>
       <input
         type="number"
         [(ngModel)]="minPrice"
         (input)="searchProduct()"
         placeholder="Ej: 1000"
-        class="border border-gray-300 px-3 py-2 rounded-lg w-36 focus:ring-2 focus:ring-blue-400 outline-none"
+        class="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 px-3 py-2 rounded-lg w-36 focus:ring-2 focus:ring-blue-400 outline-none"
       />
     </div>
 
-    <!-- Precio máximo -->
     <div class="flex flex-col">
-      <label class="text-sm font-semibold text-gray-600 mb-1">Precio máximo</label>
+      <label class="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-1">Precio máximo</label>
       <input
         type="number"
         [(ngModel)]="maxPrice"
         (input)="searchProduct()"
         placeholder="Ej: 5000"
-        class="border border-gray-300 px-3 py-2 rounded-lg w-36 focus:ring-2 focus:ring-blue-400 outline-none"
+        class="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 px-3 py-2 rounded-lg w-36 focus:ring-2 focus:ring-blue-400 outline-none"
       />
     </div>
 
-    <!-- Estado activo/inactivo -->
     <div class="flex flex-col">
-      <label class="text-sm font-semibold text-gray-600 mb-1">Estado</label>
+      <label class="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-1">Estado</label>
       <select
         [(ngModel)]="isActive"
         (change)="searchProduct()"
-        class="border border-gray-300 px-3 py-2 rounded-lg w-36 focus:ring-2 focus:ring-blue-400 outline-none"
+        class="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 px-3 py-2 rounded-lg w-36 focus:ring-2 focus:ring-blue-400 outline-none"
       >
         <option value="">Todos</option>
         <option value="true">Activos</option>
@@ -100,8 +90,8 @@
     </div>
   </div>
 
-  <!-- 🔹 Tabla de productos -->
-  <div *ngIf="!loading && !error" class="overflow-x-auto bg-white rounded-xl shadow-lg">
+  <!-- Tabla de productos -->
+  <div *ngIf="!loading && !error" class="overflow-x-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg">
     <table class="min-w-full border-collapse">
       <thead class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
         <tr>
@@ -113,15 +103,15 @@
           <th class="py-3 px-4 text-center font-bold">Acciones</th>
         </tr>
       </thead>
-
       <tbody>
         <tr
           *ngFor="let product of products"
-          class="border-b hover:bg-blue-100 hover:shadow-md hover:scale-[1.01] transition-all duration-200 cursor-pointer">
-          <td class="py-2 px-4 text-center">{{ product.id }}</td>
-          <td class="py-2 px-4 text-center">{{ product.name }}</td>
-          <td class="py-2 px-4 text-center">{{ product.description }}</td>
-          <td class="py-2 px-4 text-center">
+          class="border-b border-gray-100 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-700 hover:shadow-md hover:scale-[1.01] transition-all duration-200 cursor-pointer"
+        >
+          <td class="py-2 px-4 text-center text-gray-700 dark:text-gray-300">{{ product.id }}</td>
+          <td class="py-2 px-4 text-center text-gray-700 dark:text-gray-300">{{ product.name }}</td>
+          <td class="py-2 px-4 text-center text-gray-700 dark:text-gray-300">{{ product.description }}</td>
+          <td class="py-2 px-4 text-center text-gray-700 dark:text-gray-300">
             ${{ product.price | number: '1.2-2':'es-CO' }}
           </td>
           <td class="py-2 px-4 text-center">
@@ -152,12 +142,12 @@
     </table>
   </div>
 
-  <!-- 🔹 Modal formulario producto -->
+  <!-- Modal formulario producto -->
   <div
     *ngIf="showForm"
     class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
   >
-    <div class="bg-white w-96 rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
+    <div class="bg-white dark:bg-gray-800 w-96 rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
       <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-4">
         <h2 class="text-xl font-bold text-white text-center">
           {{ editingProduct ? 'Editar Producto' : 'Nuevo Producto' }}
@@ -167,28 +157,28 @@
       <div class="p-6">
         <form (ngSubmit)="saveProduct()" class="space-y-4">
           <div>
-            <label class="block text-gray-700 font-medium mb-1">Nombre</label>
+            <label class="block text-gray-700 dark:text-gray-200 font-medium mb-1">Nombre</label>
             <input
               type="text"
               [(ngModel)]="productForm.name"
               name="name"
               required
-              class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-150"
+              class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-150"
             />
           </div>
 
           <div>
-            <label class="block text-gray-700 font-medium mb-1">Descripción</label>
+            <label class="block text-gray-700 dark:text-gray-200 font-medium mb-1">Descripción</label>
             <input
               type="text"
               [(ngModel)]="productForm.description"
               name="description"
-              class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-150"
+              class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-150"
             />
           </div>
 
           <div>
-            <label class="block text-gray-700 font-medium mb-1">Precio</label>
+            <label class="block text-gray-700 dark:text-gray-200 font-medium mb-1">Precio</label>
             <input
               type="text"
               [(ngModel)]="productForm.price"
@@ -196,12 +186,12 @@
               appPriceFormat
               required
               placeholder="Ej: 12.000"
-              class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-150"
+              class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-150"
             />
           </div>
 
           <div>
-            <label class="block text-gray-700 font-medium mb-1">Activo</label>
+            <label class="block text-gray-700 dark:text-gray-200 font-medium mb-1">Activo</label>
             <input
               type="checkbox"
               [(ngModel)]="productForm.is_active"
@@ -215,7 +205,7 @@
             <button
               type="button"
               (click)="closeForm()"
-              class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition-all duration-150"
+              class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-150"
             >
               Cancelar
             </button>

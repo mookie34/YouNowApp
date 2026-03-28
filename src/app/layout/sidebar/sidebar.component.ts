@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NgFor } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,9 +10,12 @@ import { NgFor } from '@angular/common';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })
-
-
 export class SidebarComponent {
+  constructor(private authService: AuthService) {}
+
+  logout(): void {
+    this.authService.logout();
+  }
   menu = [
     { label: 'Dashboard', icon: '🏠', route: '/dashboard', exact: true },
     {label: 'Clientes', icon: '👥', route: '/customers' },

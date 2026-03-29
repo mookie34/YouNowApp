@@ -16,7 +16,7 @@ export class CouriersComponent implements OnInit {
   loading = true;
   error = '';
   searchTerm = '';
-  searchType: 'id' | 'name' | 'phone' | 'license_plate' = 'id';
+  searchType: 'id' | 'name' | 'phone' | 'license_plate' | 'vehicle' = 'id';
   private searchSubject = new Subject<string>();
 
   showForm = false;
@@ -94,10 +94,11 @@ export class CouriersComponent implements OnInit {
       return;
     }
 
-    const filters: Partial<Pick<Courier, 'name' | 'phone' | 'license_plate'>> = {};
+    const filters: Partial<Pick<Courier, 'name' | 'phone' | 'license_plate' | 'vehicle'>> = {};
     if (this.searchType === 'name') filters.name = term;
     if (this.searchType === 'phone') filters.phone = term;
     if (this.searchType === 'license_plate') filters.license_plate = term;
+    if (this.searchType === 'vehicle') filters.vehicle = term;
 
     this.courierService.getCouriersByFilter(filters).subscribe({
       next: (data) => {
@@ -110,6 +111,11 @@ export class CouriersComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  onSearchTypeChange(): void {
+    this.searchTerm = '';
+    this.loadCouriers();
   }
 
   clearSearch(): void {

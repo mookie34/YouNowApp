@@ -24,15 +24,31 @@
   <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm mb-6 flex flex-wrap gap-3 items-center">
     <select
       [(ngModel)]="searchType"
+      (ngModelChange)="onSearchTypeChange()"
       class="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
     >
       <option value="id">Buscar por ID</option>
       <option value="name">Buscar por Nombre</option>
       <option value="phone">Buscar por Teléfono</option>
       <option value="license_plate">Buscar por Placa</option>
+      <option value="vehicle">Buscar por Vehículo</option>
+    </select>
+
+    <select
+      *ngIf="searchType === 'vehicle'"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onSearchChange($event)"
+      class="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 px-3 py-2 rounded-lg flex-grow focus:ring-2 focus:ring-blue-400 outline-none"
+    >
+      <option value="">Todos los vehículos</option>
+      <option value="Carro">Carro</option>
+      <option value="Moto">Moto</option>
+      <option value="Bicicleta">Bicicleta</option>
+      <option value="Bicicleta eléctrica">Bicicleta eléctrica</option>
     </select>
 
     <input
+      *ngIf="searchType !== 'vehicle'"
       type="text"
       [(ngModel)]="searchTerm"
       (input)="onSearchChange($any($event.target).value)"

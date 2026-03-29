@@ -32,11 +32,12 @@ export class CourierService {
     return this.http.get<Courier>(`${this.apiUrl}/${id}`);
   }
 
-  getCouriersByFilter(filters: Partial<Pick<Courier, 'name' | 'phone' | 'license_plate'>>): Observable<Courier[]> {
+  getCouriersByFilter(filters: Partial<Pick<Courier, 'name' | 'phone' | 'license_plate' | 'vehicle'>>): Observable<Courier[]> {
     let params = new HttpParams();
     if (filters.name) params = params.set('name', filters.name);
     if (filters.phone) params = params.set('phone', filters.phone);
     if (filters.license_plate) params = params.set('license_plate', filters.license_plate);
+    if (filters.vehicle) params = params.set('vehicle', filters.vehicle);
     return this.http.get<Courier[]>(`${this.apiUrl}/filter`, { params });
   }
 

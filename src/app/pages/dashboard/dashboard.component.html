@@ -26,7 +26,9 @@
       <div class="text-3xl mr-4">🛵</div>
       <div>
         <p class="text-sm text-gray-500 dark:text-gray-400">Domiciliarios disponibles</p>
-        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">3</h2>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+          {{ availableCouriersCount !== null ? availableCouriersCount : '...' }}
+        </h2>
       </div>
     </div>
 

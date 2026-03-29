@@ -4,6 +4,7 @@ import { MainLayoutComponent } from './layout/main-layout/main-layout.component'
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { CustomersComponent } from './pages/customers/customers.component';
 import { ProductsComponent } from './pages/products/products.component';
+import { CouriersComponent } from './pages/couriers/couriers.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -17,6 +18,7 @@ export const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'customers', component: CustomersComponent },
       { path: 'products', component: ProductsComponent },
+      { path: 'domiciliarios', component: CouriersComponent },
     ]
   },
   { path: '**', redirectTo: '' }
